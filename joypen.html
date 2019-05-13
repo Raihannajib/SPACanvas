@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+    .container {
+       background: rgb(226, 226, 226);
+       margin: 70;
+       height: 420px;
+       width: 570px;
+       }
+   
+     
+    
+     
+    </style>
+    <title>joyPaint</title>
+  </head>
+  <body>
+     <header>
+               <div class="jumbotron">
+                         <h1 class="display-4">Welcome to joyPint</h1>
+                         <p class="lead">This is a simple canvas ... </p>
+                         <hr class="my-4">  
+                          </div>
+     </header>
+     <div class="container">
+     <canvas id="canvas" ></canvas>
+     <hr/>
+     <div id="settings">
+        <button type="button" class="btn btn-primary" id="save">save</button>
+        <button type="button" class="btn btn-primary" id="clear">clear</button>
+         <span>Color :
+         <input type="color" class="btn btn-outline-secondary" value="" id="Cpen"></span>
+         <span>width :
+         <input type="range" class="btn btn-outline-secondary" min="1" max="10" value="1" id="wpen"></span>
+    </div>
+    <script>
+           
+           const canvas = document.querySelector('#canvas');
+           const bloc = document.querySelector('#settings')
+          
+          
+           if(canvas.getContext){
+
+            const cN = canvas.getContext('2d');
+            canvas.style.border='2px  solid black';
+            bloc.style.margin='8px';
+            canvas.style.margin='8px';
+            canvas.height='300';
+            canvas.width='400';
+            canvas.style.background='white'
+
+            const coPe = document.querySelector("#Cpen");
+            const wiPe  = document.querySelector("#wpen");
+
+            document.querySelector('#save').addEventListener('click',sImage);
+            document.querySelector('#clear').addEventListener('click',cImage);
+            //Tracking mouse moves : m
+            const m = {draw:false,x:6,y:6,lastX:0,lastY:0};
+    
+    
+    canvas.addEventListener('mousemove',function (e){
+        m.lastX = m.x;
+        m.lastY = m.y;
+        m.x = e.x-canvas.offsetLeft;
+        m.y = e.y-canvas.offsetTop;
+        //console.log(m.x,m.y);
+        draw('move');
+    })
+    canvas.addEventListener('mousedown',function(e){draw('down');})
+    canvas.addEventListener('mouseup',function(e){draw('up');})
+    canvas.addEventListener('mouseout',function(e){draw('out');})
+    function draw(val){
+        if(val==='up'){
+             m.draw=false;
+        }
+        if(val==='down'){
+             m.draw=true;
+        }
+        if(val==='out'){
+             m.draw=false;
+        }
+        if(m.draw){
+             console.log('drawing');
+             cN.beginPath();
+             cN.moveTo(m.lastX,m.lastY);
+             cN.lineTo(m.x,m.y);
+             cN.strokeStyle = coPe.value;
+             cN.lineWidth = wiPe.value;
+             cN.stroke();
+             cN.closePath();
+
+            
+        }
+    }
+    function sImage(){
+         const data = canvas.toDataURL();
+         console.log(data);
+         
+         const link = document.createElement('a');
+         document.body.appendChild(link);
+         link.setAttribute('download','joypaint.png');
+         link.href = data;
+         link.click();
+         document.body.removeChild(link);
+    }
+    
+    
+    function cImage(){
+          let op=confirm('Are you sure?');
+          if(op){
+               cN.clearRect(6,6,canvas.offsetWidth,canvas.offsetHeight);
+          }
+    }
+ 
+
+    }else{
+                notsupportedcanva
+           }
+
+</script>
+   </div>
+  </body>
+</html>
